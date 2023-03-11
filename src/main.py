@@ -34,17 +34,17 @@ def match_2_canvas(image):
     return image
 
 
-def update_image():
-    file_path = filedialog.askopenfile()
+def update_image(canvas_obj, container):
+    file_path = filedialog.askopenfile(filetypes=[('Images', '*.jpg *.png'), ('All', '*.*')])
     if not file_path:
         return
-    # image needs to be hold in global variable
-
     image = Image.open(file_path.name)
     image = match_2_canvas(image)
+
+    # image needs to be hold in global variable
     global map_img
     map_img = ImageTk.PhotoImage(image)
-    canvas.itemconfig(image_container, image=map_img)
+    canvas_obj.itemconfig(container, image=map_img)
 
 
 # Create an instance of tkinter frame
@@ -55,7 +55,7 @@ win.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
 canvas = Canvas(win, width=CANVAS_WIDTH, height=CANVAS_HEIGHT)
 canvas.pack()
 button = ttk.Button(win, text="Open",
-                    command=lambda: update_image())
+                    command=lambda: update_image(canvas, image_container))
 button.pack()
 
 image_container = canvas.create_image(0, 0, anchor=NW)
