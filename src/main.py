@@ -7,25 +7,22 @@ def open_action(image_label):
     file_path = filedialog.askopenfile()
     if not file_path:
         return
-    image1 = Image.open(file_path.name)
-    test = ImageTk.PhotoImage(image1)
+    image = Image.open(file_path.name)
+    resized_img = image.resize((600, 350))
+    image_tk = ImageTk.PhotoImage(resized_img)
 
-    image_label.config(image=test)
-    image_label.image = test
+    image_label.config(image=image_tk)
+    image_label.image = image_tk
 
 
 root = Tk()
 root.title('DnD travel helper')
 root.geometry("600x400")
 
-label1 = tkinter.Label()
-click_button = Button(root, text="Open", width=8, command=lambda: open_action(label1))
+map_label = tkinter.Label()
+click_button = Button(root, text="Open", width=8, command=lambda: open_action(map_label))
 
 click_button.pack()
-label1.pack()
-
-
-
-
+map_label.pack()
 
 root.mainloop()
