@@ -1,28 +1,30 @@
-import tkinter
-from tkinter import Tk, Button, filedialog
+from tkinter import *
+from tkinter import ttk, filedialog
 from PIL import Image, ImageTk
 
+map_img = None
 
-def open_action(image_label):
+
+def update_image():
     file_path = filedialog.askopenfile()
     if not file_path:
         return
-    image = Image.open(file_path.name)
-    resized_img = image.resize((600, 350))
-    image_tk = ImageTk.PhotoImage(resized_img)
-
-    image_label.config(image=image_tk)
-    image_label.image = image_tk
+    # image needs to be hold in global variable
+    global map_img
+    map_img = ImageTk.PhotoImage(Image.open(file_path.name))
+    canvas.itemconfig(image_container, image=map_img)
 
 
-root = Tk()
-root.title('DnD travel helper')
-root.geometry("600x400")
+# Create an instance of tkinter frame
+win = Tk()
+win.title('DnD travel helper')
+win.geometry("750x400")
 
-map_label = tkinter.Label()
-click_button = Button(root, text="Open", width=8, command=lambda: open_action(map_label))
+canvas = Canvas(win, width=650, height=350)
+canvas.pack()
+button = ttk.Button(win, text="Open",
+                    command=lambda: update_image())
+button.pack()
 
-click_button.pack()
-map_label.pack()
-
-root.mainloop()
+image_container = canvas.create_image(0, 0, anchor=NW)
+win.mainloop()
